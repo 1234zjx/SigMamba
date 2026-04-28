@@ -1,0 +1,9 @@
+torch
+einops
+numpy
+mamba_ssm
+tqdm
+PyYAML
+signatory
+transformers
+pandas
