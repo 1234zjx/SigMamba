@@ -128,7 +128,6 @@ class MissingForecastDataset(Dataset):
     def build_delta(self, mask):
         """
         Delta[t,c]:
-        仅在缺失时累计（mask=0），观测时为0
         """
         T, C = mask.shape
     
@@ -137,9 +136,9 @@ class MissingForecastDataset(Dataset):
         for c in range(C):
             for t in range(1, T):
     
-                if mask[t, c] == 0:  # 当前是缺失
+                if mask[t, c] == 0:  
                     delta[t, c] = delta[t - 1, c] + 1
-                else:  # 当前是观测
+                else:  
                     delta[t, c] = 0
     
         return delta
