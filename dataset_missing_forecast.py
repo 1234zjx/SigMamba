@@ -128,25 +128,20 @@ class MissingForecastDataset(Dataset):
     def build_delta(self, mask):
         """
         Delta[t,c]:
-        distance since last observed value
+        仅在缺失时累计（mask=0），观测时为0
         """
         T, C = mask.shape
-
-        delta = np.zeros(
-            (T, C),
-            dtype=np.float32
-        )
-
+    
+        delta = np.zeros((T, C), dtype=np.float32)
+    
         for c in range(C):
             for t in range(1, T):
-
-                if mask[t - 1, c] == 1:
-                    delta[t, c] = 1
-                else:
-                    delta[t, c] = (
-                        delta[t - 1, c] + 1
-                    )
-
+    
+                if mask[t, c] == 0:  # 当前是缺失
+                    delta[t, c] = delta[t - 1, c] + 1
+                else:  # 当前是观测
+                    delta[t, c] = 0
+    
         return delta
 
     def build_windows(self):
